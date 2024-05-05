@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border: 1px solid black;
+        }
+
+        body {
+            height: 100vh;
+            background: gainsboro;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wrapper {
+            display: flex;
+            margin: auto;
+            justify-content: space-between;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-position: center;
+            object-fit: cover;
+            transition: 0.25s;
+        }
+
+        .image {
+            width: 20%;
+            height: 200px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: -10px 0;
+        }
+
+        .image:hover img {
+            transform: scale(1.2);
+        }
+
+        .gallery {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(31 109 10);
+            display: flex;
+            align-items: center;
+            color: antiquewhite;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.8);
+            transition: 0.5s;
+        }
+
+        .close {
+            position: fixed;
+            top: 15px;
+            right: 25px;
+            font-size: 35px;
+            color: #d39090;
+            cursor: pointer;
+        }
+
+        .control {
+            font-size: 35px;
+            color: rgb(189, 135, 135);
+            position: absolute;
+        }
+
+        .control.prev {
+            left: 15px;
+            border: none;
+            color: #d39090;
+            cursor: pointer;
+        }
+
+        .control.next {
+            right: 15px;
+            border: none;
+            color: #d39090;
+            cursor: pointer;
+        }
+
+        .gallery_inner {
+            width: 36%;
+            height: 85%;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .show {
+            opacity: 1; 
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.pinimg.com/564x/1c/3a/c6/1c3ac6763bcf4786871ef9f10dcccbec.jpg');
+            background-size: cover;
+            filter: blur(10px);
+        }
+
+        .noidung {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+    </style>
+    <title>Gallery</title>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="noidung">
+        <div class="wrapper">
+            <div class="image">
+                <img src="https://i.pinimg.com/564x/89/2c/d8/892cd8629c6a428c8311344e330f6635.jpg" alt="Anh 1">
+            </div>
+            <div class="image">
+                <img src="https://i.pinimg.com/564x/0d/c0/6c/0dc06cc59049f84de94ea144acd1a7c0.jpg" alt="Anh 2">
+            </div>
+            <div class="image">
+                <img src="https://i.pinimg.com/564x/bf/82/12/bf82121d16b9f3421563735d683578f5.jpg" alt="Anh 3">
+            </div>
+            <div class="image">
+                <img src="https://i.pinimg.com/564x/df/56/d1/df56d1d2e276072b1b5f1630c72343cd.jpg" alt="Anh 4">
+            </div>
+            <div class="image">
+                <img src="https://i.pinimg.com/736x/5f/db/3a/5fdb3a52c9784f88d409cf2919cc8578.jpg" alt="Anh 5">
+            </div>
+            <div class="image">
+                <img src="https://i.pinimg.com/564x/93/4e/6a/934e6a0f0aab64acf2d84951fa348946.jpg" alt="Anh 6">
+            </div>
+        </div>
+    </div>
+    <div class="gallery">
+        <i class="fas fa-times close"></i>
+        <div class="gallery_inner">
+            <img src="" alt="Ảnh">
+        </div>
+        <div class="control prev">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="control next">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+    </div>
+    <script>
+        var images = document.querySelectorAll('.image img');
+        var prev = document.querySelector('.prev');
+        var next = document.querySelector('.next');
+        var close = document.querySelector('.close');
+        var galleryImg = document.querySelector('.gallery_inner img');
+        var gallery = document.querySelector('.gallery');
+        var currentIndex = 0;
+        
+        function showGallery() {
+            if (currentIndex === 0) {
+                prev.classList.add('hidden');
+            } else {
+                prev.classList.remove('hidden');
+            }
+        
+            if (currentIndex === images.length - 1) {
+                next.classList.add('hidden');
+            } else {
+                next.classList.remove('hidden');
+            }
+        
+            galleryImg.src = images[currentIndex].src;
+        }
+        
+        images.forEach((item, index) => {
+            item.addEventListener('click', function() {
+                currentIndex = index;
+                showGallery();
+                gallery.classList.add('show');
+            });
+        });
+        
+        close.addEventListener('click', function() {
+            gallery.classList.remove('show');
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode === 27) {
+                gallery.classList.remove('show');
+            }
+        });
+        
+        prev.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showGallery();
+            }
+        });
+        
+        next.addEventListener('click', function() {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+                showGallery();
+            }
+        });
+
+        // Tự động chuyển ảnh
+        setInterval(function() {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+            showGallery();
+        }, 5000); // Đổi ảnh mỗi 5 giây
+    </script>
+</body>
+</html>
